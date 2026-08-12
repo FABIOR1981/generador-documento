@@ -189,8 +189,31 @@ Finalmente, el programa de capacitación continua logró que el 94% del personal
         </div>
       </fieldset>
 
-      <button type="submit" id="btnExport">📥 Generar Documento Word</button>
+      <div class="btn-group">
+        <button type="button" id="btnPreview" class="btn-preview">👁️ Vista Previa</button>
+        <button type="submit" id="btnExport">📥 Generar Documento Word</button>
+      </div>
     </form>
+  </div>
+
+  <!-- MODAL VISTA PREVIA -->
+  <div id="previewModal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>👁️ Vista Previa del Documento</h3>
+        <button type="button" class="modal-close" id="btnClosePreview">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="preview-config-bar">
+          <span id="previewConfigLabel">Moderno + Estándar</span>
+          <button type="button" id="btnDownloadFromPreview" class="btn-secondary-small">📥 Descargar .docx</button>
+        </div>
+        <div id="previewDocument" class="preview-document">
+          <!-- Aquí se inyecta la vista previa -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>

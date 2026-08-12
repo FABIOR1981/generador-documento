@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateStylePreview();
   updateFormalityHint();
   updateSubChecks();
+  initPreview();
 
   document.getElementById('btnAddKpi').addEventListener('click', addKpi);
   document.getElementById('reportForm').addEventListener('submit', (e) => {
@@ -979,3 +980,224 @@ async function generarWord() {
     btn.textContent = originalText;
   }
 }
+
+
+/* ============================================================
+   VISTA PREVIA DEL DOCUMENTO
+   ============================================================ */
+
+function initPreview() {
+  const btnPreview = document.getElementById('btnPreview');
+  const btnClose = document.getElementById('btnClosePreview');
+  const btnDownload = document.getElementById('btnDownloadFromPreview');
+  const modal = document.getElementById('previewModal');
+  const overlay = modal.querySelector('.modal-overlay');
+
+  btnPreview.addEventListener('click', () => {
+    generarVistaPrevia();
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  btnClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+  });
+
+  btnDownload.addEventListener('click', () => {
+    generarWord();
+  });
+}
+
+function generarVistaPrevia() {
+  const estiloKey = document.getElementById('estiloVisual').value;
+  const formalidadKey = document.getElementById('nivelFormalidad').value;
+  const marcaAgua = document.getElementById('marcaAgua').value;
+  const numFirmas = parseInt(document.getElementById('numFirmas').value, 10);
+
+  const incluirMetadatos = document.getElementById('incluirMetadatos').checked;
+  const incluirContenido = document.getElementById('incluirContenido').checked;
+  const incluirResumen = document.getElementById('incluirResumen').checked;
+  const incluirDesarrollo = document.getElementById('incluirDesarrollo').checked;
+  const incluirKPIs = document.getElementById('incluirKPIs').checked;
+  const incluirConclusiones = document.getElementById('incluirConclusiones').checked;
+  const incluirEstado = document.getElementById('incluirEstado').checked;
+
+  const titulo = document.getElementById('tituloInforme').value;
+  const subtitulo = document.getElementById('subtituloInforme').value;
+  const autor = document.getElementById('autor').value;
+  const departamento = document.getElementById('departamento').value;
+  const destinatario = document.getElementById('destinatario').value;
+  const fechaRaw = document.getElementById('fechaDoc').value;
+  const fechaStr = formatDateES(fechaRaw);
+  const resumen = document.getElementById('resumenEjecutivo').value;
+  const desarrollo = document.getElementById('desarrolloText').value;
+  const conclusiones = document.getElementById('conclusionesText').value;
+  const estado = document.getElementById('estadoDoc').value;
+  const alineacion = document.getElementById('alineacionTexto').value === 'JUSTIFY' ? 'justify' : 'left';
+
+  // Configuraciones
+  let CFG = { ...ESTILOS[estiloKey] };
+  let FMT = { ...FORMALIDADES[formalidadKey] };
+
+  if (formalidadKey === 'solemne') {
+    CFG = {
+      ...CFG,
+      headerBg: 'FFFFFF', headerTitleColor: '000000', headerSubtitleColor: '333333',
+      headerBorderLeft: { style: 'SINGLE', size: 36, color: '000000' },
+      secBg: 'FFFFFF', secTextColor: '000000', bodyTextColor: '000000',
+      secBorders: { top: 'NONE', bottom: 'SINGLE', left: 'NONE', right: 'NONE', bottomColor: '000000', bottomSize: 12 },
+      kpiHeaderBg: '000000', kpiHeaderText: 'FFFFFF',
+      metaBg: 'FFFFFF', metaBorder: '000000',
+      quoteBg: 'FFFFFF', quoteBorder: '000000',
+      estadoColors: { BORRADOR: 'E2E8F0', APROBADO: 'D1FAE5', 'REQUIERE ACCIÓN': 'FEE2E2', CONFIDENCIAL: 'FEF3C7' }
+    };
+  }
+
+  // Actualizar label de config
+  document.getElementById('previewConfigLabel').textContent =
+    `${ESTILOS[estiloKey].name} + ${formalidadKey.charAt(0).toUpperCase() + formalidadKey.slice(1)}`;
+
+  // Construir HTML de preview
+  let html = '<div style="position:relative;">';
+
+  // Marca de agua
+  if (marcaAgua !== 'NINGUNA') {
+    html += `<div class="preview-watermark">${marcaAgua}</div>`;
+  }
+
+  // Banner
+  const bannerBorder = CFG.headerBorderLeft.color
+    ? `border-left: ${CFG.headerBorderLeft.size / 8}px solid #${CFG.headerBorderLeft.color};`
+    : '';
+  html += `
+    <div class="preview-banner" style="background:#${CFG.headerBg}; ${bannerBorder}">
+      <div class="preview-banner-text">
+        <div class="preview-banner-subtitle" style="color:#${CFG.headerSubtitleColor}">${subtitulo.toUpperCase()}</div>
+        <h2 class="preview-banner-title" style="color:#${CFG.headerTitleColor}; font-family:${FMT.font}, sans-serif">${titulo}</h2>
+      </div>
+    </div>
+  `;
+
+  // Metadatos
+  if (incluirMetadatos) {
+    html += `
+      <div class="preview-meta">
+        <div class="preview-meta-cell" style="background:#${CFG.metaBg}">
+          <strong>Elaborado por:</strong> ${autor}<br>
+          <strong>Área:</strong> ${departamento}
+        </div>
+        <div class="preview-meta-cell" style="background:#${CFG.metaBg}">
+          <strong>Dirigido a:</strong> ${destinatario}<br>
+          <strong>Fecha:</strong> ${fechaStr}
+        </div>
+      </div>
+    `;
+  }
+
+  // Contenido
+  if (incluirContenido) {
+    let sectionNum = 0;
+    const romans = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+
+    function secTitle(text) {
+      sectionNum++;
+      let t = text;
+      if (FMT.romanNumbers) t = `${romans[sectionNum - 1] || sectionNum}. ${t}`;
+      if (FMT.sectionUppercase) t = t.toUpperCase();
+      return t;
+    }
+
+    function secBar(text) {
+      const b = CFG.secBorders;
+      let borderStyle = '';
+      if (b.bottom === 'SINGLE') borderStyle += `border-bottom: ${b.bottomSize / 8}px solid #${b.bottomColor};`;
+      if (b.left === 'SINGLE') borderStyle += `border-left: ${b.leftSize / 8}px solid #${b.leftColor};`;
+      if (b.top === 'SINGLE') borderStyle += `border-top: ${b.topSize / 8}px solid #${b.topColor};`;
+
+      return `<div class="preview-section-bar" style="background:#${CFG.secBg}; color:#${CFG.secTextColor}; ${borderStyle}">${secTitle(text)}</div>`;
+    }
+
+    // Resumen
+    if (incluirResumen && resumen.trim()) {
+      html += secBar('Resumen Ejecutivo');
+      if (FMT.addQuotes) {
+        html += `<div class="preview-quote" style="background:#${CFG.quoteBg}; border-left: 4px solid #${CFG.quoteBorder}; text-align:${alineacion}; font-family:${FMT.font}, serif">${resumen}</div>`;
+      } else {
+        html += `<p class="preview-paragraph" style="text-align:${alineacion}; font-family:${FMT.font}, sans-serif; line-height:${FMT.lineSpacing / 200}">${resumen}</p>`;
+      }
+    }
+
+    // Desarrollo
+    if (incluirDesarrollo && desarrollo.trim()) {
+      html += secBar('Desarrollo y Análisis');
+      const paras = desarrollo.split('\n\n').filter(p => p.trim());
+      paras.forEach(p => {
+        html += `<p class="preview-paragraph" style="text-align:${alineacion}; font-family:${FMT.font}, sans-serif; line-height:${FMT.lineSpacing / 200}">${p.trim()}</p>`;
+      });
+    }
+
+    // KPIs
+    if (incluirKPIs && kpis.length > 0) {
+      html += secBar('Tabla de Métricas');
+      html += `
+        <table class="preview-table" style="font-family:${FMT.font}, sans-serif">
+          <thead>
+            <tr style="background:#${CFG.kpiHeaderBg}; color:#${CFG.kpiHeaderText}">
+              <th>VARIABLE / INDICADOR</th>
+              <th>VALOR / ESTADO</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      kpis.forEach(kpi => {
+        html += `<tr><td>${kpi.label}</td><td><strong>${kpi.value}</strong></td></tr>`;
+      });
+      html += '</tbody></table>';
+    }
+
+    // Conclusiones
+    if (incluirConclusiones && conclusiones.trim()) {
+      html += secBar('Conclusiones y Recomendaciones');
+      html += `<p class="preview-paragraph" style="text-align:${alineacion}; font-family:${FMT.font}, sans-serif; line-height:${FMT.lineSpacing / 200}">${conclusiones}</p>`;
+    }
+
+    // Estado
+    if (incluirEstado) {
+      const estadoBg = CFG.estadoColors[estado] || 'E2E8F0';
+      html += `
+        <div class="preview-estado" style="font-family:${FMT.font}, sans-serif">
+          <div class="preview-estado-label" style="background:#${CFG.kpiHeaderBg}; color:#${CFG.kpiHeaderText}">ESTADO DEL DOCUMENTO</div>
+          <div class="preview-estado-value" style="background:#${estadoBg}; color:#${CFG.bodyTextColor}">${estado}</div>
+        </div>
+      `;
+    }
+  }
+
+  // Firmas
+  if (numFirmas > 0) {
+    html += '<div class="preview-firmas">';
+    for (let i = 0; i < numFirmas; i++) {
+      html += `
+        <div class="preview-firma" style="font-family:${FMT.font}, sans-serif">
+          <div class="preview-firma-nombre">${i === 0 ? autor : destinatario}</div>
+          <div class="preview-firma-cargo">${i === 0 ? departamento : 'Revisado / Aprobado'}</div>
+        </div>
+      `;
+    }
+    html += '</div>';
+  }
+
+  html += '</div>';
+
+  document.getElementById('previewDocument').innerHTML = html;
+}
+
+// Inicializar vista previa al cargar
+initPreview();

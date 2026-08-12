@@ -1,53 +1,281 @@
+/* ============================================================
+   GENERADOR UNIVERSAL DE INFORMES — APP V2
+   ============================================================ */
+
+// ─── CONFIGURACIONES ─────────────────────────────────────────
+const ESTILOS = {
+  moderno: {
+    name: 'Moderno',
+    headerBg: 'F1F5F9',
+    headerTitleColor: '0F172A',
+    headerSubtitleColor: '0284C7',
+    headerBorderLeft: { style: 'SINGLE', size: 36, color: '0284C7' },
+    secBg: 'F1F5F9',
+    secTextColor: '0F172A',
+    bodyTextColor: '1E293B',
+    secBorders: {
+      top: 'NONE', bottom: 'NONE', left: 'SINGLE', right: 'NONE',
+      leftColor: '0284C7', leftSize: 36
+    },
+    kpiHeaderBg: '0F172A',
+    kpiHeaderText: 'FFFFFF',
+    estadoColors: {
+      BORRADOR: 'E2E8F0',
+      APROBADO: 'D1FAE5',
+      'REQUIERE ACCIÓN': 'FEE2E2',
+      CONFIDENCIAL: 'FEF3C7'
+    },
+    metaBg: 'F8FAFC',
+    metaBorder: 'E2E8F0',
+    quoteBg: 'F1F5F9',
+    quoteBorder: '0284C7'
+  },
+  corporativo: {
+    name: 'Corporativo Oscuro',
+    headerBg: '1E3A5F',
+    headerTitleColor: 'FFFFFF',
+    headerSubtitleColor: 'C9A227',
+    headerBorderLeft: { style: 'SINGLE', size: 36, color: 'C9A227' },
+    secBg: '1E3A5F',
+    secTextColor: 'FFFFFF',
+    bodyTextColor: '1E293B',
+    secBorders: {
+      top: 'NONE', bottom: 'SINGLE', left: 'NONE', right: 'NONE',
+      bottomColor: 'C9A227', bottomSize: 24
+    },
+    kpiHeaderBg: '1E3A5F',
+    kpiHeaderText: 'FFFFFF',
+    estadoColors: {
+      BORRADOR: 'E2E8F0',
+      APROBADO: 'D1FAE5',
+      'REQUIERE ACCIÓN': 'FEE2E2',
+      CONFIDENCIAL: 'FEF3C7'
+    },
+    metaBg: 'F1F5F9',
+    metaBorder: '1E3A5F',
+    quoteBg: 'F1F5F9',
+    quoteBorder: 'C9A227'
+  },
+  ecologico: {
+    name: 'Ecológico',
+    headerBg: 'F0FDF4',
+    headerTitleColor: '14532D',
+    headerSubtitleColor: '16A34A',
+    headerBorderLeft: { style: 'SINGLE', size: 36, color: '15803D' },
+    secBg: 'F0FDF4',
+    secTextColor: '14532D',
+    bodyTextColor: '1E293B',
+    secBorders: {
+      top: 'NONE', bottom: 'NONE', left: 'SINGLE', right: 'NONE',
+      leftColor: '15803D', leftSize: 36
+    },
+    kpiHeaderBg: '15803D',
+    kpiHeaderText: 'FFFFFF',
+    estadoColors: {
+      BORRADOR: 'E2E8F0',
+      APROBADO: 'DCFCE7',
+      'REQUIERE ACCIÓN': 'FEE2E2',
+      CONFIDENCIAL: 'FEF9C3'
+    },
+    metaBg: 'F0FDF4',
+    metaBorder: '16A34A',
+    quoteBg: 'F0FDF4',
+    quoteBorder: '16A34A'
+  },
+  tecnologico: {
+    name: 'Tecnológico',
+    headerBg: '0F172A',
+    headerTitleColor: 'FFFFFF',
+    headerSubtitleColor: '38BDF8',
+    headerBorderLeft: { style: 'SINGLE', size: 36, color: '38BDF8' },
+    secBg: '1E293B',
+    secTextColor: 'FFFFFF',
+    bodyTextColor: '1E293B',
+    secBorders: {
+      top: 'NONE', bottom: 'NONE', left: 'SINGLE', right: 'NONE',
+      leftColor: '0EA5E9', leftSize: 36
+    },
+    kpiHeaderBg: '0F172A',
+    kpiHeaderText: '38BDF8',
+    estadoColors: {
+      BORRADOR: 'E2E8F0',
+      APROBADO: 'D1FAE5',
+      'REQUIERE ACCIÓN': 'FEE2E2',
+      CONFIDENCIAL: 'FEF3C7'
+    },
+    metaBg: 'F1F5F9',
+    metaBorder: '0F172A',
+    quoteBg: 'F1F5F9',
+    quoteBorder: '0EA5E9'
+  },
+  clasico: {
+    name: 'Clásico Papel',
+    headerBg: 'FFFBEB',
+    headerTitleColor: '78350F',
+    headerSubtitleColor: '92400E',
+    headerBorderLeft: { style: 'DOUBLE', size: 24, color: '92400E' },
+    secBg: 'FEF3C7',
+    secTextColor: '78350F',
+    bodyTextColor: '451A03',
+    secBorders: {
+      top: 'SINGLE', bottom: 'SINGLE', left: 'NONE', right: 'NONE',
+      topColor: '92400E', topSize: 12,
+      bottomColor: '92400E', bottomSize: 12
+    },
+    kpiHeaderBg: '92400E',
+    kpiHeaderText: 'FFFBEB',
+    estadoColors: {
+      BORRADOR: 'E2E8F0',
+      APROBADO: 'DCFCE7',
+      'REQUIERE ACCIÓN': 'FEE2E2',
+      CONFIDENCIAL: 'FEF9C3'
+    },
+    metaBg: 'FFFBEB',
+    metaBorder: '92400E',
+    quoteBg: 'FFFBEB',
+    quoteBorder: '92400E'
+  }
+};
+
+const FORMALIDADES = {
+  estandar: {
+    font: 'Calibri',
+    lineSpacing: 276,
+    sectionUppercase: false,
+    addQuotes: false,
+    compact: false,
+    spacious: false,
+    romanNumbers: false,
+    sectionSpacing: { before: 120, after: 120 }
+  },
+  interno: {
+    font: 'Arial',
+    lineSpacing: 240,
+    sectionUppercase: false,
+    addQuotes: false,
+    compact: true,
+    spacious: false,
+    romanNumbers: false,
+    sectionSpacing: { before: 80, after: 80 }
+  },
+  ejecutivo: {
+    font: 'Georgia',
+    lineSpacing: 300,
+    sectionUppercase: false,
+    addQuotes: true,
+    compact: false,
+    spacious: true,
+    romanNumbers: false,
+    sectionSpacing: { before: 200, after: 160 }
+  },
+  solemne: {
+    font: 'Times New Roman',
+    lineSpacing: 360,
+    sectionUppercase: true,
+    addQuotes: false,
+    compact: false,
+    spacious: true,
+    romanNumbers: true,
+    sectionSpacing: { before: 240, after: 200 }
+  }
+};
+
+const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+
+// ─── ESTADO ──────────────────────────────────────────────────
+let kpis = [
+  { label: 'Presupuesto Ejecutado', value: '84%' },
+  { label: 'Nivel de Cumplimiento', value: 'Conforme a Cronograma' }
+];
+let sectionCounter = 0;
+
+// ─── INICIALIZACIÓN ──────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('fechaDoc').valueAsDate = new Date();
   renderKPIs();
+  updateStylePreview();
+  updateFormalityHint();
+  updateSubChecks();
+
   document.getElementById('btnAddKpi').addEventListener('click', addKpi);
   document.getElementById('reportForm').addEventListener('submit', (e) => {
     e.preventDefault();
     generarWord();
   });
-  document.getElementById('headerImage').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    const hint = document.getElementById('imageHint');
-    if (file) {
-      const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      hint.textContent = `Seleccionado: ${file.name} (${sizeMB} MB)`;
-      hint.style.color = '#0284c7';
-    } else {
-      hint.textContent = 'Ninguna imagen seleccionada.';
-      hint.style.color = '#64748b';
-    }
-  });
+  document.getElementById('headerImage').addEventListener('change', onImageChange);
+  document.getElementById('estiloVisual').addEventListener('change', updateStylePreview);
+  document.getElementById('nivelFormalidad').addEventListener('change', updateFormalityHint);
+  document.getElementById('incluirContenido').addEventListener('change', updateSubChecks);
 });
 
-/* ============================================================
-   KPIs DINÁMICOS
-   ============================================================ */
-let kpis = [
-  { label: 'Presupuesto Ejecutado', value: '84%' },
-  { label: 'Nivel de Cumplimiento', value: 'Conforme a Cronograma' }
-];
+function onImageChange(e) {
+  const file = e.target.files[0];
+  const hint = document.getElementById('imageHint');
+  if (file) {
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+    hint.textContent = `Seleccionado: ${file.name} (${sizeMB} MB)`;
+    hint.style.color = '#0284c7';
+  } else {
+    hint.textContent = 'Ninguna imagen seleccionada.';
+    hint.style.color = '#64748b';
+  }
+}
 
+function updateStylePreview() {
+  const estilo = document.getElementById('estiloVisual').value;
+  const preview = document.getElementById('stylePreview');
+  preview.className = 'style-preview ' + estilo;
+  preview.textContent = ESTILOS[estilo].name;
+}
+
+function updateFormalityHint() {
+  const f = document.getElementById('nivelFormalidad').value;
+  const cfg = FORMALIDADES[f];
+  const hints = {
+    estandar: `Fuente ${cfg.font}, interlineado normal`,
+    interno: `Fuente ${cfg.font}, formato compacto`,
+    ejecutivo: `Fuente ${cfg.font}, espaciado amplio, citas en bloque`,
+    solemne: `Fuente ${cfg.font}, doble espacio, numeración romana, blanco y negro`
+  };
+  document.getElementById('formalityHint').textContent = hints[f];
+}
+
+function updateSubChecks() {
+  const checked = document.getElementById('incluirContenido').checked;
+  const container = document.getElementById('subChecksContent');
+  container.classList.toggle('disabled', !checked);
+  const groups = ['resumenGroup', 'desarrolloGroup', 'kpisGroup', 'conclusionesGroup', 'estadoGroup'];
+  groups.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.opacity = checked ? '1' : '0.4';
+  });
+}
+
+// ─── KPIs DINÁMICOS ──────────────────────────────────────────
 function renderKPIs() {
   const container = document.getElementById('kpiContainer');
   container.innerHTML = '';
   kpis.forEach((kpi, index) => {
     const row = document.createElement('div');
     row.className = 'kpi-row';
+
     const inputLabel = document.createElement('input');
     inputLabel.type = 'text';
     inputLabel.placeholder = 'Métrica / Indicador';
     inputLabel.value = kpi.label;
     inputLabel.required = true;
     inputLabel.addEventListener('input', (e) => { kpis[index].label = e.target.value; });
+
     const inputValue = document.createElement('input');
     inputValue.type = 'text';
     inputValue.placeholder = 'Valor / Estado';
     inputValue.value = kpi.value;
     inputValue.required = true;
     inputValue.addEventListener('input', (e) => { kpis[index].value = e.target.value; });
+
     row.appendChild(inputLabel);
     row.appendChild(inputValue);
+
     if (kpis.length > 1) {
       const btnRemove = document.createElement('button');
       btnRemove.type = 'button';
@@ -75,9 +303,7 @@ function addKpi() {
   }
 }
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
+// ─── HELPERS ─────────────────────────────────────────────────
 function readImageAsBuffer(file) {
   return new Promise((resolve, reject) => {
     if (!file) return resolve(null);
@@ -107,10 +333,7 @@ function getImageDimensions(file) {
 
 function calcProportionalSize(imgW, imgH, maxW, maxH) {
   const ratio = Math.min(maxW / imgW, maxH / imgH, 1);
-  return {
-    width: Math.round(imgW * ratio),
-    height: Math.round(imgH * ratio)
-  };
+  return { width: Math.round(imgW * ratio), height: Math.round(imgH * ratio) };
 }
 
 function formatDateES(dateString) {
@@ -130,25 +353,19 @@ function showToast(message, type = 'error') {
   }, 5000);
 }
 
-/* ============================================================
-   MARCA DE AGUA DIAGONAL (Canvas → PNG → ImageRun)
-   ============================================================ */
 function createWatermarkImage(text) {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    const W = 1200;
-    const H = 1700;
+    const W = 1200, H = 1700;
     canvas.width = W;
     canvas.height = H;
     ctx.clearRect(0, 0, W, H);
-
     const fontSize = 130;
     ctx.font = `bold ${fontSize}px Arial, sans-serif`;
     ctx.fillStyle = 'rgba(160, 160, 160, 0.18)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-
     ctx.save();
     ctx.translate(W / 2, H / 2);
     ctx.rotate(-Math.PI / 4);
@@ -156,7 +373,6 @@ function createWatermarkImage(text) {
     ctx.fillText(text, 0, -fontSize * 2.2);
     ctx.fillText(text, 0, fontSize * 2.2);
     ctx.restore();
-
     canvas.toBlob((blob) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -165,12 +381,11 @@ function createWatermarkImage(text) {
   });
 }
 
-/* ============================================================
-   GENERACIÓN DEL DOCUMENTO
-   ============================================================ */
+// ─── CONSTRUCCIÓN DEL DOCUMENTO ──────────────────────────────
 async function generarWord() {
   const btn = document.getElementById('btnExport');
   const originalText = btn.textContent;
+  sectionCounter = 0;
 
   const form = document.getElementById('reportForm');
   if (!form.checkValidity()) {
@@ -179,7 +394,7 @@ async function generarWord() {
   }
 
   if (!window.docx || !window.docx.Document) {
-    showToast('Error: la librería docx.js no se cargó correctamente. Verificá tu conexión a internet.', 'error');
+    showToast('Error: la librería docx.js no se cargó correctamente. Verificá tu conexión.', 'error');
     return;
   }
 
@@ -192,15 +407,13 @@ async function generarWord() {
       WidthType, AlignmentType, ImageRun, BorderStyle, Header, Footer, PageNumber
     } = window.docx;
 
-    // 1. Lectura de campos
-    const estilo = document.getElementById('estiloVisual').value;
-    const formalidad = document.getElementById('nivelFormalidad').value;
+    // ── 1. Lectura de campos ────────────────────────────────
+    const estiloKey = document.getElementById('estiloVisual').value;
+    const formalidadKey = document.getElementById('nivelFormalidad').value;
     const marcaAgua = document.getElementById('marcaAgua').value;
     const alineacionSel = document.getElementById('alineacionTexto').value;
     const numFirmas = parseInt(document.getElementById('numFirmas').value, 10);
 
-    // Checkboxes de inclusión
-    const incluirBanner = document.getElementById('incluirBanner').checked;
     const incluirMetadatos = document.getElementById('incluirMetadatos').checked;
     const incluirContenido = document.getElementById('incluirContenido').checked;
     const incluirResumen = document.getElementById('incluirResumen').checked;
@@ -222,7 +435,39 @@ async function generarWord() {
     const conclusiones = document.getElementById('conclusionesText').value;
     const estado = document.getElementById('estadoDoc').value;
 
-    // 2. Validación de imagen
+    // ── 2. Configuraciones ──────────────────────────────────
+    let CFG = { ...ESTILOS[estiloKey] };
+    let FMT = { ...FORMALIDADES[formalidadKey] };
+
+    // Solemne anula colores del estilo
+    if (formalidadKey === 'solemne') {
+      CFG = {
+        ...CFG,
+        headerBg: 'FFFFFF',
+        headerTitleColor: '000000',
+        headerSubtitleColor: '333333',
+        headerBorderLeft: { style: 'SINGLE', size: 36, color: '000000' },
+        secBg: 'FFFFFF',
+        secTextColor: '000000',
+        bodyTextColor: '000000',
+        secBorders: {
+          top: 'NONE', bottom: 'SINGLE', left: 'NONE', right: 'NONE',
+          bottomColor: '000000', bottomSize: 12
+        },
+        kpiHeaderBg: '000000',
+        kpiHeaderText: 'FFFFFF',
+        metaBg: 'FFFFFF',
+        metaBorder: '000000',
+        quoteBg: 'FFFFFF',
+        quoteBorder: '000000'
+      };
+    }
+
+    function alignmentMap(val) {
+      return val === 'JUSTIFY' ? AlignmentType.JUSTIFY : AlignmentType.LEFT;
+    }
+
+    // ── 3. Validación de imagen ─────────────────────────────
     let headerImageBuffer = null;
     let headerImageSize = { width: 120, height: 60 };
     if (imageInput) {
@@ -239,81 +484,7 @@ async function generarWord() {
       headerImageBuffer = await readImageAsBuffer(imageInput);
     }
 
-    // 3. Mapeo de formalidad
-    function alignmentMap(val) {
-      if (val === 'JUSTIFY') return AlignmentType.JUSTIFY;
-      return AlignmentType.LEFT;
-    }
-
-    let CONFIG_FORMALIDAD = {
-      font: 'Calibri',
-      alignment: alignmentMap(alineacionSel),
-      lineSpacing: 276
-    };
-
-    if (formalidad === 'interno') {
-      CONFIG_FORMALIDAD.font = 'Arial';
-      CONFIG_FORMALIDAD.lineSpacing = 240;
-    } else if (formalidad === 'ejecutivo') {
-      CONFIG_FORMALIDAD.font = 'Georgia';
-      CONFIG_FORMALIDAD.lineSpacing = 300;
-    } else if (formalidad === 'solemne') {
-      CONFIG_FORMALIDAD.font = 'Times New Roman';
-      CONFIG_FORMALIDAD.lineSpacing = 360;
-    }
-
-    // 4. Configurar paleta visual
-    let CONFIG_ESTILO = {
-      headerBg: formalidad === 'solemne' ? 'FFFFFF' : 'F1F5F9',
-      headerTitleColor: formalidad === 'solemne' ? '000000' : '0F172A',
-      headerSubtitleColor: formalidad === 'solemne' ? '333333' : '0284C7',
-      headerBorderLeft: { style: BorderStyle.SINGLE, size: 36, color: formalidad === 'solemne' ? '000000' : '0284C7' },
-      secBg: formalidad === 'solemne' ? 'FFFFFF' : 'F1F5F9',
-      secTextColor: formalidad === 'solemne' ? '000000' : '0F172A',
-      bodyTextColor: formalidad === 'solemne' ? '000000' : '1E293B',
-      secBorders: {
-        top: { style: BorderStyle.NONE },
-        bottom: formalidad === 'solemne' ? { style: BorderStyle.SINGLE, size: 12, color: '000000' } : { style: BorderStyle.NONE },
-        left: formalidad === 'solemne' ? { style: BorderStyle.NONE } : { style: BorderStyle.SINGLE, size: 36, color: '0284C7' },
-        right: { style: BorderStyle.NONE }
-      }
-    };
-
-    if (estilo === 'tonoPastel' && formalidad !== 'solemne') {
-      CONFIG_ESTILO = {
-        headerBg: 'E0F2FE',
-        headerTitleColor: '0F172A',
-        headerSubtitleColor: '0369A1',
-        headerBorderLeft: { style: BorderStyle.NONE },
-        secBg: 'E0F2FE',
-        secTextColor: '0369A1',
-        bodyTextColor: '0F172A',
-        secBorders: {
-          top: { style: BorderStyle.NONE },
-          bottom: { style: BorderStyle.NONE },
-          left: { style: BorderStyle.NONE },
-          right: { style: BorderStyle.NONE }
-        }
-      };
-    } else if (estilo === 'minimalista' && formalidad !== 'solemne') {
-      CONFIG_ESTILO = {
-        headerBg: 'FFFFFF',
-        headerTitleColor: '0F172A',
-        headerSubtitleColor: '0284C7',
-        headerBorderLeft: { style: BorderStyle.NONE },
-        secBg: 'FFFFFF',
-        secTextColor: '0284C7',
-        bodyTextColor: '1E293B',
-        secBorders: {
-          top: { style: BorderStyle.NONE },
-          bottom: { style: BorderStyle.SINGLE, size: 18, color: '0284C7' },
-          left: { style: BorderStyle.NONE },
-          right: { style: BorderStyle.NONE }
-        }
-      };
-    }
-
-    // 5. Marca de agua diagonal
+    // ── 4. Marca de agua ────────────────────────────────────
     let headerConfig = undefined;
     if (marcaAgua !== 'NINGUNA') {
       const watermarkBuffer = await createWatermarkImage(marcaAgua.toUpperCase());
@@ -338,38 +509,61 @@ async function generarWord() {
       });
     }
 
-    // 6. Helper para barras de sección
-    function crearBarraSeccion(texto) {
-      return new Table({
-        width: { size: 100, type: WidthType.PERCENTAGE },
-        rows: [
-          new TableRow({
-            children: [
-              new TableCell({
-                shading: CONFIG_ESTILO.secBg !== 'FFFFFF' ? { fill: CONFIG_ESTILO.secBg } : undefined,
-                margins: { top: 100, bottom: 100, left: 140, right: 140 },
-                borders: CONFIG_ESTILO.secBorders,
-                children: [
-                  new Paragraph({
-                    children: [
-                      new TextRun({
-                        text: (estilo === 'minimalista' || formalidad === 'solemne') ? texto.toUpperCase() : texto,
-                        bold: true,
-                        color: CONFIG_ESTILO.secTextColor,
-                        size: 22,
-                        font: CONFIG_FORMALIDAD.font
-                      })
-                    ]
-                  })
-                ]
-              })
-            ]
-          })
-        ]
+    // ── 5. Helpers de construcción ──────────────────────────
+    function makeBorder(style, size, color) {
+      if (style === 'NONE' || !style) return { style: BorderStyle.NONE, size: 0, color: 'auto' };
+      const bs = BorderStyle[style] || BorderStyle.SINGLE;
+      return { style: bs, size: size || 12, color: color || '000000' };
+    }
+
+    function buildCellBorders(cfg) {
+      const b = cfg.secBorders;
+      return {
+        top: makeBorder(b.top, b.topSize, b.topColor),
+        bottom: makeBorder(b.bottom, b.bottomSize, b.bottomColor),
+        left: makeBorder(b.left, b.leftSize, b.leftColor),
+        right: makeBorder(b.right, b.rightSize, b.rightColor)
+      };
+    }
+
+    function buildHeaderCellBorders(cfg) {
+      const bl = cfg.headerBorderLeft;
+      return {
+        top: makeBorder('NONE', 0, 'auto'),
+        bottom: makeBorder('NONE', 0, 'auto'),
+        left: makeBorder(bl.style, bl.size, bl.color),
+        right: makeBorder('NONE', 0, 'auto')
+      };
+    }
+
+    function sectionTitle(text) {
+      sectionCounter++;
+      let display = text;
+      if (FMT.romanNumbers) {
+        display = `${ROMAN_NUMERALS[sectionCounter - 1] || sectionCounter}. ${text}`;
+      }
+      if (FMT.sectionUppercase) {
+        display = display.toUpperCase();
+      }
+      return display;
+    }
+
+    function tr(opts) {
+      return new TextRun({
+        text: opts.text || '',
+        bold: opts.bold || false,
+        italics: opts.italics || false,
+        color: opts.color || '000000',
+        size: opts.size || 20,
+        font: opts.font || FMT.font
       });
     }
 
-    // 7. Banner Header
+    function cellShading(fill) {
+      return fill && fill !== 'FFFFFF' ? { fill } : undefined;
+    }
+
+    // ── 6. Banner Header ────────────────────────────────────
     const bannerHeader = new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows: [
@@ -377,50 +571,37 @@ async function generarWord() {
           children: [
             new TableCell({
               width: { size: headerImageBuffer ? 70 : 100, type: WidthType.PERCENTAGE },
-              shading: CONFIG_ESTILO.headerBg !== 'FFFFFF' ? { fill: CONFIG_ESTILO.headerBg } : undefined,
+              shading: cellShading(CFG.headerBg),
               margins: { top: 180, bottom: 180, left: 200, right: 200 },
-              borders: {
-                top: { style: BorderStyle.NONE },
-                bottom: { style: BorderStyle.NONE },
-                left: CONFIG_ESTILO.headerBorderLeft,
-                right: { style: BorderStyle.NONE }
-              },
+              borders: buildHeaderCellBorders(CFG),
               children: [
                 new Paragraph({
                   spacing: { after: 60 },
-                  children: [
-                    new TextRun({
-                      text: subtitulo.toUpperCase(),
-                      color: CONFIG_ESTILO.headerSubtitleColor,
-                      size: 16,
-                      font: CONFIG_FORMALIDAD.font,
-                      bold: true
-                    })
-                  ]
+                  children: [tr({ text: subtitulo.toUpperCase(), color: CFG.headerSubtitleColor, size: 16, bold: true })]
                 }),
                 new Paragraph({
-                  children: [
-                    new TextRun({
-                      text: titulo,
-                      bold: true,
-                      color: CONFIG_ESTILO.headerTitleColor,
-                      size: 28,
-                      font: CONFIG_FORMALIDAD.font
-                    })
-                  ]
+                  children: [tr({ text: titulo, color: CFG.headerTitleColor, size: 28, bold: true })]
                 })
               ]
             }),
             ...(headerImageBuffer ? [
               new TableCell({
                 width: { size: 30, type: WidthType.PERCENTAGE },
-                shading: CONFIG_ESTILO.headerBg !== 'FFFFFF' ? { fill: CONFIG_ESTILO.headerBg } : undefined,
+                shading: cellShading(CFG.headerBg),
                 margins: { top: 100, bottom: 100, left: 100, right: 100 },
-                borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+                borders: {
+                  top: makeBorder('NONE', 0, 'auto'),
+                  bottom: makeBorder('NONE', 0, 'auto'),
+                  left: makeBorder('NONE', 0, 'auto'),
+                  right: makeBorder('NONE', 0, 'auto')
+                },
                 children: [
                   new Paragraph({
                     alignment: AlignmentType.CENTER,
-                    children: [new ImageRun({ data: headerImageBuffer, transformation: { width: headerImageSize.width, height: headerImageSize.height } })]
+                    children: [new ImageRun({
+                      data: headerImageBuffer,
+                      transformation: { width: headerImageSize.width, height: headerImageSize.height }
+                    })]
                   })
                 ]
               })
@@ -430,7 +611,7 @@ async function generarWord() {
       ]
     });
 
-    // 8. Metadatos
+    // ── 7. Metadatos ────────────────────────────────────────
     const tablaMetadatos = new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows: [
@@ -438,20 +619,44 @@ async function generarWord() {
           children: [
             new TableCell({
               width: { size: 50, type: WidthType.PERCENTAGE },
-              shading: { fill: 'F8FAFC' },
+              shading: cellShading(CFG.metaBg),
               margins: { top: 80, bottom: 80, left: 120, right: 120 },
+              borders: {
+                top: makeBorder('NONE', 0, 'auto'),
+                bottom: makeBorder('NONE', 0, 'auto'),
+                left: makeBorder('NONE', 0, 'auto'),
+                right: makeBorder('NONE', 0, 'auto')
+              },
               children: [
-                new Paragraph({ children: [new TextRun({ text: 'Elaborado por: ', bold: true, size: 18, color: '334155', font: CONFIG_FORMALIDAD.font }), new TextRun({ text: autor, size: 18, font: CONFIG_FORMALIDAD.font })] }),
-                new Paragraph({ children: [new TextRun({ text: 'Área: ', bold: true, size: 18, color: '334155', font: CONFIG_FORMALIDAD.font }), new TextRun({ text: departamento, size: 18, font: CONFIG_FORMALIDAD.font })] })
+                new Paragraph({ children: [
+                  tr({ text: 'Elaborado por: ', bold: true, size: 18, color: '334155' }),
+                  tr({ text: autor, size: 18 })
+                ]}),
+                new Paragraph({ children: [
+                  tr({ text: 'Área: ', bold: true, size: 18, color: '334155' }),
+                  tr({ text: departamento, size: 18 })
+                ]})
               ]
             }),
             new TableCell({
               width: { size: 50, type: WidthType.PERCENTAGE },
-              shading: { fill: 'F8FAFC' },
+              shading: cellShading(CFG.metaBg),
               margins: { top: 80, bottom: 80, left: 120, right: 120 },
+              borders: {
+                top: makeBorder('NONE', 0, 'auto'),
+                bottom: makeBorder('NONE', 0, 'auto'),
+                left: makeBorder('NONE', 0, 'auto'),
+                right: makeBorder('NONE', 0, 'auto')
+              },
               children: [
-                new Paragraph({ children: [new TextRun({ text: 'Dirigido a: ', bold: true, size: 18, color: '334155', font: CONFIG_FORMALIDAD.font }), new TextRun({ text: destinatario, size: 18, font: CONFIG_FORMALIDAD.font })] }),
-                new Paragraph({ children: [new TextRun({ text: 'Fecha: ', bold: true, size: 18, color: '334155', font: CONFIG_FORMALIDAD.font }), new TextRun({ text: fechaStr, size: 18, font: CONFIG_FORMALIDAD.font })] })
+                new Paragraph({ children: [
+                  tr({ text: 'Dirigido a: ', bold: true, size: 18, color: '334155' }),
+                  tr({ text: destinatario, size: 18 })
+                ]}),
+                new Paragraph({ children: [
+                  tr({ text: 'Fecha: ', bold: true, size: 18, color: '334155' }),
+                  tr({ text: fechaStr, size: 18 })
+                ]})
               ]
             })
           ]
@@ -459,18 +664,77 @@ async function generarWord() {
       ]
     });
 
-    // 9. KPIs dinámicos
+    // ── 8. Barra de sección ─────────────────────────────────
+    function crearBarraSeccion(texto) {
+      return new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                shading: cellShading(CFG.secBg),
+                margins: { top: 100, bottom: 100, left: 140, right: 140 },
+                borders: buildCellBorders(CFG),
+                children: [
+                  new Paragraph({
+                    children: [tr({ text: sectionTitle(texto), bold: true, color: CFG.secTextColor, size: 22 })]
+                  })
+                ]
+              })
+            ]
+          })
+        ]
+      });
+    }
+
+    // ── 9. Cita en bloque (ejecutivo) ───────────────────────
+    function crearCitaBloque(texto) {
+      return new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                shading: cellShading(CFG.quoteBg),
+                margins: { top: 120, bottom: 120, left: 200, right: 200 },
+                borders: {
+                  top: makeBorder('NONE', 0, 'auto'),
+                  bottom: makeBorder('NONE', 0, 'auto'),
+                  left: makeBorder('SINGLE', 36, CFG.quoteBorder),
+                  right: makeBorder('NONE', 0, 'auto')
+                },
+                children: [
+                  new Paragraph({
+                    alignment: alignmentMap(alineacionSel),
+                    spacing: { line: FMT.lineSpacing },
+                    children: [tr({ text: texto, size: 20, italics: true, color: CFG.bodyTextColor })]
+                  })
+                ]
+              })
+            ]
+          })
+        ]
+      });
+    }
+
+    // ── 10. KPIs ────────────────────────────────────────────
     const kpiRows = [];
     kpiRows.push(
       new TableRow({
         children: [
           new TableCell({
-            shading: { fill: '0F172A' },
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'VARIABLE / INDICADOR', bold: true, color: 'FFFFFF', size: 18, font: CONFIG_FORMALIDAD.font })] })]
+            shading: cellShading(CFG.kpiHeaderBg),
+            children: [new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [tr({ text: 'VARIABLE / INDICADOR', bold: true, color: CFG.kpiHeaderText, size: 18 })]
+            })]
           }),
           new TableCell({
-            shading: { fill: '0F172A' },
-            children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'VALOR / ESTADO', bold: true, color: 'FFFFFF', size: 18, font: CONFIG_FORMALIDAD.font })] })]
+            shading: cellShading(CFG.kpiHeaderBg),
+            children: [new Paragraph({
+              alignment: AlignmentType.CENTER,
+              children: [tr({ text: 'VALOR / ESTADO', bold: true, color: CFG.kpiHeaderText, size: 18 })]
+            })]
           })
         ]
       })
@@ -481,11 +745,26 @@ async function generarWord() {
           children: [
             new TableCell({
               margins: { top: 80, bottom: 80, left: 100, right: 100 },
-              children: [new Paragraph({ children: [new TextRun({ text: kpi.label, size: 18, font: CONFIG_FORMALIDAD.font })] })]
+              borders: {
+                top: makeBorder('NONE', 0, 'auto'),
+                bottom: makeBorder('NONE', 0, 'auto'),
+                left: makeBorder('NONE', 0, 'auto'),
+                right: makeBorder('NONE', 0, 'auto')
+              },
+              children: [new Paragraph({ children: [tr({ text: kpi.label, size: 18 })] })]
             }),
             new TableCell({
               margins: { top: 80, bottom: 80, left: 100, right: 100 },
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: kpi.value, bold: true, size: 18, font: CONFIG_FORMALIDAD.font })] })]
+              borders: {
+                top: makeBorder('NONE', 0, 'auto'),
+                bottom: makeBorder('NONE', 0, 'auto'),
+                left: makeBorder('NONE', 0, 'auto'),
+                right: makeBorder('NONE', 0, 'auto')
+              },
+              children: [new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [tr({ text: kpi.value, bold: true, size: 18 })]
+              })]
             })
           ]
         })
@@ -497,12 +776,8 @@ async function generarWord() {
       rows: kpiRows
     });
 
-    // 10. Estado
-    let colorFondoEstado = 'E2E8F0';
-    if (estado === 'APROBADO') colorFondoEstado = 'D1FAE5';
-    if (estado === 'REQUIERE ACCIÓN') colorFondoEstado = 'FEE2E2';
-    if (estado === 'CONFIDENCIAL') colorFondoEstado = 'FEF3C7';
-
+    // ── 11. Estado ──────────────────────────────────────────
+    const colorFondoEstado = CFG.estadoColors[estado] || 'E2E8F0';
     const tablaEstado = new Table({
       width: { size: 100, type: WidthType.PERCENTAGE },
       rows: [
@@ -510,47 +785,65 @@ async function generarWord() {
           children: [
             new TableCell({
               width: { size: 40, type: WidthType.PERCENTAGE },
-              shading: { fill: '0F172A' },
+              shading: cellShading(CFG.kpiHeaderBg),
               margins: { top: 100, bottom: 100, left: 100, right: 100 },
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'ESTADO DEL DOCUMENTO', bold: true, color: 'FFFFFF', size: 18, font: CONFIG_FORMALIDAD.font })] })]
+              borders: {
+                top: makeBorder('NONE', 0, 'auto'),
+                bottom: makeBorder('NONE', 0, 'auto'),
+                left: makeBorder('NONE', 0, 'auto'),
+                right: makeBorder('NONE', 0, 'auto')
+              },
+              children: [new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [tr({ text: 'ESTADO DEL DOCUMENTO', bold: true, color: CFG.kpiHeaderText, size: 18 })]
+              })]
             }),
             new TableCell({
               width: { size: 60, type: WidthType.PERCENTAGE },
-              shading: { fill: colorFondoEstado },
+              shading: cellShading(colorFondoEstado),
               margins: { top: 100, bottom: 100, left: 100, right: 100 },
-              children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: estado, bold: true, size: 20, color: '0F172A', font: CONFIG_FORMALIDAD.font })] })]
+              borders: {
+                top: makeBorder('NONE', 0, 'auto'),
+                bottom: makeBorder('NONE', 0, 'auto'),
+                left: makeBorder('NONE', 0, 'auto'),
+                right: makeBorder('NONE', 0, 'auto')
+              },
+              children: [new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [tr({ text: estado, bold: true, size: 20, color: CFG.bodyTextColor })]
+              })]
             })
           ]
         })
       ]
     });
 
-    // 11. Bloque de Firmas
+    // ── 12. Firmas ──────────────────────────────────────────
     let bloqueFirmas = [];
     if (numFirmas > 0) {
       const celdasFirma = [];
-      celdasFirma.push(
-        new TableCell({
-          borders: { top: { style: BorderStyle.SINGLE, size: 12, color: '000000' }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
-          children: [
-            new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: autor, bold: true, size: 18, font: CONFIG_FORMALIDAD.font })] }),
-            new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: departamento, size: 16, color: '64748B', font: CONFIG_FORMALIDAD.font })] })
-          ]
-        })
-      );
-
-      if (numFirmas === 2) {
+      for (let i = 0; i < numFirmas; i++) {
         celdasFirma.push(
           new TableCell({
-            borders: { top: { style: BorderStyle.SINGLE, size: 12, color: '000000' }, bottom: { style: BorderStyle.NONE }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+            borders: {
+              top: makeBorder('SINGLE', 12, '000000'),
+              bottom: makeBorder('NONE', 0, 'auto'),
+              left: makeBorder('NONE', 0, 'auto'),
+              right: makeBorder('NONE', 0, 'auto')
+            },
             children: [
-              new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: destinatario, bold: true, size: 18, font: CONFIG_FORMALIDAD.font })] }),
-              new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Revisado / Aprobado', size: 16, color: '64748B', font: CONFIG_FORMALIDAD.font })] })
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [tr({ text: i === 0 ? autor : destinatario, bold: true, size: 18 })]
+              }),
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                children: [tr({ text: i === 0 ? departamento : 'Revisado / Aprobado', size: 16, color: '64748B' })]
+              })
             ]
           })
         );
       }
-
       bloqueFirmas = [
         new Paragraph({ spacing: { before: 600 } }),
         new Table({
@@ -560,56 +853,66 @@ async function generarWord() {
       ];
     }
 
-    // 12. Párrafos del cuerpo con color consistente
-    const párrafosDesarrollo = desarrollo.split('\n\n').filter(p => p.trim() !== '').map(p =>
-      new Paragraph({
-        alignment: CONFIG_FORMALIDAD.alignment,
-        spacing: { line: CONFIG_FORMALIDAD.lineSpacing, after: 180 },
-        children: [new TextRun({ text: p.trim(), size: 20, font: CONFIG_FORMALIDAD.font, color: CONFIG_ESTILO.bodyTextColor })]
-      })
-    );
-
-    // 13. ENSAMBLADO DINÁMICO del documento
-    const docChildren = [];
-
-    if (incluirBanner) {
-      docChildren.push(bannerHeader);
-      docChildren.push(new Paragraph({ spacing: { before: 180, after: 100 } }));
+    // ── 13. Párrafos del cuerpo ─────────────────────────────
+    function bodyParagraph(text, extraSpacing = {}) {
+      return new Paragraph({
+        alignment: alignmentMap(alineacionSel),
+        spacing: { line: FMT.lineSpacing, after: 180, ...extraSpacing },
+        children: [tr({ text: text.trim(), size: 20, color: CFG.bodyTextColor })]
+      });
     }
 
+    const párrafosDesarrollo = desarrollo.split('\n\n')
+      .filter(p => p.trim() !== '')
+      .map(p => bodyParagraph(p.trim()));
+
+    // ── 14. ENSAMBLADO ──────────────────────────────────────
+    const docChildren = [];
+
+    // Banner
+    docChildren.push(bannerHeader);
+    docChildren.push(new Paragraph({ spacing: { before: 180, after: 100 } }));
+
+    // Metadatos
     if (incluirMetadatos) {
       docChildren.push(tablaMetadatos);
       docChildren.push(new Paragraph({ spacing: { before: 200, after: 150 } }));
     }
 
+    // Contenido
     if (incluirContenido) {
       if (incluirResumen) {
         docChildren.push(crearBarraSeccion('Resumen Ejecutivo'));
-        docChildren.push(new Paragraph({
-          alignment: CONFIG_FORMALIDAD.alignment,
-          spacing: { before: 120, after: 240, line: CONFIG_FORMALIDAD.lineSpacing },
-          children: [new TextRun({ text: resumen, size: 20, font: CONFIG_FORMALIDAD.font, color: CONFIG_ESTILO.bodyTextColor })]
-        }));
+        if (FMT.addQuotes && resumen.trim()) {
+          docChildren.push(new Paragraph({ spacing: { before: 120 } }));
+          docChildren.push(crearCitaBloque(resumen));
+        } else {
+          docChildren.push(bodyParagraph(resumen, {
+            before: FMT.sectionSpacing.before,
+            after: FMT.sectionSpacing.after
+          }));
+        }
       }
 
       if (incluirDesarrollo) {
         docChildren.push(crearBarraSeccion('Desarrollo y Análisis'));
-        docChildren.push(new Paragraph({ spacing: { before: 120 } }));
+        docChildren.push(new Paragraph({ spacing: { before: FMT.sectionSpacing.before } }));
         docChildren.push(...párrafosDesarrollo);
         docChildren.push(new Paragraph({ spacing: { before: 100, after: 100 } }));
       }
 
       if (incluirKPIs) {
+        docChildren.push(crearBarraSeccion('Tabla de Métricas'));
+        docChildren.push(new Paragraph({ spacing: { before: FMT.sectionSpacing.before } }));
         docChildren.push(tablaKPIs);
         docChildren.push(new Paragraph({ spacing: { before: 240, after: 100 } }));
       }
 
       if (incluirConclusiones) {
         docChildren.push(crearBarraSeccion('Conclusiones y Recomendaciones'));
-        docChildren.push(new Paragraph({
-          alignment: CONFIG_FORMALIDAD.alignment,
-          spacing: { before: 120, after: 240, line: CONFIG_FORMALIDAD.lineSpacing },
-          children: [new TextRun({ text: conclusiones, size: 20, font: CONFIG_FORMALIDAD.font, color: CONFIG_ESTILO.bodyTextColor })]
+        docChildren.push(bodyParagraph(conclusiones, {
+          before: FMT.sectionSpacing.before,
+          after: FMT.sectionSpacing.after
         }));
       }
 
@@ -618,14 +921,24 @@ async function generarWord() {
       }
     }
 
-    // Firmas siempre al final si están configuradas (independiente de contenido)
+    // Firmas
     if (bloqueFirmas.length > 0) {
       docChildren.push(...bloqueFirmas);
     }
 
+    // ── 15. Documento final ─────────────────────────────────
     const doc = new Document({
       sections: [{
-        properties: { page: { margin: { top: 1150, right: 1150, bottom: 1150, left: 1150 } } },
+        properties: {
+          page: {
+            margin: {
+              top: FMT.compact ? 900 : 1150,
+              right: 1150,
+              bottom: FMT.compact ? 900 : 1150,
+              left: 1150
+            }
+          }
+        },
         headers: headerConfig ? { default: headerConfig } : undefined,
         footers: {
           default: new Footer({
@@ -633,10 +946,10 @@ async function generarWord() {
               new Paragraph({
                 alignment: AlignmentType.CENTER,
                 children: [
-                  new TextRun({ text: 'Página ', size: 18, color: '64748B', font: CONFIG_FORMALIDAD.font }),
-                  new TextRun({ children: [PageNumber.CURRENT], size: 18, color: '64748B', font: CONFIG_FORMALIDAD.font }),
-                  new TextRun({ text: ' de ', size: 18, color: '64748B', font: CONFIG_FORMALIDAD.font }),
-                  new TextRun({ children: [PageNumber.TOTAL_PAGES], size: 18, color: '64748B', font: CONFIG_FORMALIDAD.font })
+                  tr({ text: 'Página ', size: 18, color: '64748B' }),
+                  new TextRun({ children: [PageNumber.CURRENT], size: 18, color: '64748B', font: FMT.font }),
+                  tr({ text: ' de ', size: 18, color: '64748B' }),
+                  new TextRun({ children: [PageNumber.TOTAL_PAGES], size: 18, color: '64748B', font: FMT.font })
                 ]
               })
             ]
@@ -646,9 +959,10 @@ async function generarWord() {
       }]
     });
 
-    // 14. Descarga
+    // ── 16. Descarga ────────────────────────────────────────
     const blob = await Packer.toBlob(doc);
-    const nombreArchivo = `Informe_${titulo.trim().replace(/\s+/g, '_')}.docx`;
+    const safeTitle = titulo.trim().replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_');
+    const nombreArchivo = `Informe_${safeTitle}_${estiloKey}_${formalidadKey}.docx`;
     window.saveAs(blob, nombreArchivo);
 
     showToast('Documento generado correctamente.', 'success');

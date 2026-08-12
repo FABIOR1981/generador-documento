@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador Universal de Informes</title>
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+  <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -25,23 +25,23 @@
           <div class="col">
             <label for="estiloVisual">Estilo Visual</label>
             <select id="estiloVisual" required>
-              <option value="moderno">⚡ Moderno (Azul corporativo)</option>
+              <option value="moderno" selected>⚡ Moderno (Azul corporativo)</option>
               <option value="corporativo">🌑 Corporativo Oscuro (Navy + Dorado)</option>
               <option value="ecologico">🌿 Ecológico (Verdes)</option>
               <option value="tecnologico">🚀 Tecnológico (Dark + Cian)</option>
               <option value="clasico">📜 Clásico Papel (Cálido)</option>
             </select>
-            <div id="stylePreview" class="style-preview"></div>
+            <div id="stylePreview" class="style-preview moderno">Moderno</div>
           </div>
           <div class="col">
             <label for="nivelFormalidad">Nivel de Formalidad</label>
             <select id="nivelFormalidad" required>
-              <option value="estandar">📋 Estándar</option>
+              <option value="estandar" selected>📋 Estándar</option>
               <option value="interno">💼 Interno / Operativo</option>
               <option value="ejecutivo">👔 Ejecutivo</option>
               <option value="solemne">⚖️ Solemne / Legal</option>
             </select>
-            <span class="hint" id="formalityHint">Interlineado normal, fuente Calibri</span>
+            <span class="hint" id="formalityHint">Fuente Calibri, interlineado normal</span>
           </div>
         </div>
 
@@ -56,7 +56,7 @@
           <div class="col">
             <label for="marcaAgua">Marca de Agua</label>
             <select id="marcaAgua">
-              <option value="NINGUNA">Ninguna</option>
+              <option value="NINGUNA" selected>Ninguna</option>
               <option value="BORRADOR">BORRADOR</option>
               <option value="CONFIDENCIAL">CONFIDENCIAL</option>
               <option value="PRELIMINAR">PRELIMINAR</option>
@@ -74,8 +74,8 @@
             <label for="numFirmas">Bloque de Firmas</label>
             <select id="numFirmas">
               <option value="0">Sin firmas</option>
-              <option value="1" selected>1 firma</option>
-              <option value="2">2 firmas</option>
+              <option value="1">1 firma</option>
+              <option value="2" selected>2 firmas</option>
             </select>
           </div>
         </div>
@@ -92,27 +92,27 @@
         <div class="form-row">
           <div class="col">
             <label for="tituloInforme">Título del Informe *</label>
-            <input type="text" id="tituloInforme" placeholder="Ej: Informe de Desempeño Q3" required>
+            <input type="text" id="tituloInforme" value="Informe de Desempeño Q3 2026" placeholder="Ej: Informe de Desempeño Q3" required>
           </div>
           <div class="col">
             <label for="subtituloInforme">Subtítulo / Área *</label>
-            <input type="text" id="subtituloInforme" placeholder="Ej: Departamento de Operaciones" required>
+            <input type="text" id="subtituloInforme" value="Departamento de Operaciones" placeholder="Ej: Departamento de Operaciones" required>
           </div>
         </div>
         <div class="form-row">
           <div class="col">
             <label for="autor">Elaborado por *</label>
-            <input type="text" id="autor" placeholder="Nombre completo" required>
+            <input type="text" id="autor" value="Ing. Fabio Rodríguez" placeholder="Nombre completo" required>
           </div>
           <div class="col">
             <label for="departamento">Área / Departamento</label>
-            <input type="text" id="departamento" placeholder="Ej: Operaciones">
+            <input type="text" id="departamento" value="Operaciones" placeholder="Ej: Operaciones">
           </div>
         </div>
         <div class="form-row">
           <div class="col">
             <label for="destinatario">Dirigido a</label>
-            <input type="text" id="destinatario" placeholder="Ej: Dirección General">
+            <input type="text" id="destinatario" value="Dra. María González" placeholder="Ej: Dirección General">
           </div>
           <div class="col">
             <label for="fechaDoc">Fecha del Documento</label>
@@ -155,12 +155,16 @@
 
         <div id="resumenGroup" class="form-group">
           <label for="resumenEjecutivo">Resumen Ejecutivo / Introducción</label>
-          <textarea id="resumenEjecutivo" rows="4" placeholder="Breve síntesis del informe..."></textarea>
+          <textarea id="resumenEjecutivo" rows="4" placeholder="Breve síntesis del informe...">El presente informe detalla el desempeño operativo del tercer trimestre de 2026. Se observa una mejora del 12% en tiempos de respuesta y una reducción del 8% en costos operativos. Los indicadores clave muestran tendencia positiva en todas las áreas evaluadas, con especial énfasis en la satisfacción del cliente que alcanzó un 4.7 sobre 5.0.</textarea>
         </div>
 
         <div id="desarrolloGroup" class="form-group">
           <label for="desarrolloText">Desarrollo / Hallazgos Principales</label>
-          <textarea id="desarrolloText" rows="6" placeholder="Desarrolla los hallazgos. Usa doble salto de línea para separar párrafos."></textarea>
+          <textarea id="desarrolloText" rows="6" placeholder="Desarrolla los hallazgos. Usa doble salto de línea para separar párrafos.">Durante el período evaluado, el equipo de operaciones implementó tres iniciativas clave que impactaron directamente en la eficiencia del departamento. La primera de ellas consistió en la reestructuración de los turnos de trabajo, logrando una cobertura más uniforme durante las horas pico y reduciendo los tiempos de espera en un 18%.
+
+En segundo lugar, se completó la migración del 85% de los procesos manuales hacia flujos automatizados. Esta transición redujo significativamente los errores humanos y aceleró los tiempos de procesamiento en un promedio de 23 minutos por solicitud, liberando al equipo para tareas de mayor valor agregado.
+
+Finalmente, el programa de capacitación continua logró que el 94% del personal obtuviera certificaciones en herramientas de gestión de proyectos, fortaleciendo las competencias técnicas del equipo y mejorando la calidad de las entregas en un 15% respecto al trimestre anterior.</textarea>
         </div>
 
         <div id="kpisGroup" class="form-group">
@@ -171,7 +175,7 @@
 
         <div id="conclusionesGroup" class="form-group">
           <label for="conclusionesText">Conclusiones y Siguientes Pasos</label>
-          <textarea id="conclusionesText" rows="4" placeholder="Conclusiones y recomendaciones..."></textarea>
+          <textarea id="conclusionesText" rows="4" placeholder="Conclusiones y recomendaciones...">Se recomienda continuar con la inversión en automatización y ampliar el programa de capacitación al resto de las áreas de la organización. Los resultados obtenidos respaldan la estrategia actual y proyectan un crecimiento sostenido del 10% para el próximo trimestre. Se sugiere además la implementación de un sistema de monitoreo en tiempo real para mantener la tendencia positiva.</textarea>
         </div>
 
         <div id="estadoGroup" class="form-group">

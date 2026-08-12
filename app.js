@@ -185,7 +185,11 @@ const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 // ─── ESTADO ──────────────────────────────────────────────────
 let kpis = [
   { label: 'Presupuesto Ejecutado', value: '84%' },
-  { label: 'Nivel de Cumplimiento', value: 'Conforme a Cronograma' }
+  { label: 'Nivel de Cumplimiento', value: 'Conforme a Cronograma' },
+  { label: 'Satisfacción del Cliente', value: '4.7 / 5.0' },
+  { label: 'Tiempo Medio de Respuesta', value: '18 minutos' },
+  { label: 'Procesos Automatizados', value: '85%' },
+  { label: 'Personal Certificado', value: '94%' }
 ];
 let sectionCounter = 0;
 

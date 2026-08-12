@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador Universal de Informes (.docx)</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+
+  <main class="container">
+    <h2>Generador Universal de Informes (.docx)</h2>
+    <p class="subtitle">Configura los datos, formalidad, estilo y marca de agua para generar tu documento Word profesional.</p>
+
+    <div id="toastBox" class="toast-box" role="status" aria-live="polite"></div>
+
+    <form id="reportForm" novalidate>
+      <!-- 1. Identidad, Formalidad y Marca de Agua -->
+      <fieldset>
+        <legend>Identidad, Formalidad y Estilo Visual</legend>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="estiloVisual">Diseño Visual:</label>
+            <select id="estiloVisual">
+              <option value="bordeIzquierdo" selected>Moderno (Borde de acento izquierdo)</option>
+              <option value="tonoPastel">Suave (Fondos pastel con texto oscuro)</option>
+              <option value="minimalista">Editorial (Minimalista con línea inferior)</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="nivelFormalidad">Nivel de Formalidad:</label>
+            <select id="nivelFormalidad">
+              <option value="interno">1. Interno / Ágil (Arial - Interlineado 1.0)</option>
+              <option value="profesional" selected>2. Profesional / Estándar (Calibri - Interlineado 1.15)</option>
+              <option value="ejecutivo">3. Ejecutivo / Directivo (Georgia - Interlineado 1.25)</option>
+              <option value="solemne">4. Solemne / Institucional (Times New Roman - Interlineado 1.5)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="marcaAgua">Marca de Agua / Clasificación:</label>
+            <select id="marcaAgua">
+              <option value="NINGUNA" selected>Sin marca de agua</option>
+              <option value="BORRADOR">BORRADOR</option>
+              <option value="CONFIDENCIAL">CONFIDENCIAL</option>
+              <option value="USO INTERNO">USO INTERNO</option>
+              <option value="COPIA NO CONTROLADA">COPIA NO CONTROLADA</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="alineacionTexto">Alineación del Texto:</label>
+            <select id="alineacionTexto">
+              <option value="LEFT">Izquierda</option>
+              <option value="JUSTIFY" selected>Justificado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label class="checkbox-label">
+              <input type="checkbox" id="incluirBanner" checked>
+              <span>Incluir Banner de Cabecera (título + subtítulo)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="headerImage">Logo o Imagen de Cabecera (PNG, JPG, máx. 5 MB):</label>
+            <input type="file" id="headerImage" accept="image/png, image/jpeg">
+            <small class="hint" id="imageHint">Ninguna imagen seleccionada.</small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="tituloInforme">Título del Informe:</label>
+            <input type="text" id="tituloInforme" value="Informe de Avance y Estado de Proyecto" required>
+          </div>
+          <div class="form-group col">
+            <label for="subtituloInforme">Subtítulo / Categoría:</label>
+            <input type="text" id="subtituloInforme" value="Revisión Trimestral - Q3" required>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 2. Metadatos del Documento -->
+      <fieldset>
+        <legend class="legend-with-check">
+          <label class="checkbox-label inline">
+            <input type="checkbox" id="incluirMetadatos" checked>
+            <span>Metadatos del Documento</span>
+          </label>
+        </legend>
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="autor">Elaborado por:</label>
+            <input type="text" id="autor" value="Ing. Juan Perez" required>
+          </div>
+          <div class="form-group col">
+            <label for="departamento">Área / Organización:</label>
+            <input type="text" id="departamento" value="Dirección de Operaciones" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="destinatario">Destinatario / Entidad:</label>
+            <input type="text" id="destinatario" value="Comité de Dirección" required>
+          </div>
+          <div class="form-group col">
+            <label for="fechaDoc">Fecha de Emisión:</label>
+            <input type="date" id="fechaDoc" required>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- 3. Contenido Principal -->
+      <fieldset>
+        <legend class="legend-with-check">
+          <label class="checkbox-label inline">
+            <input type="checkbox" id="incluirContenido" checked>
+            <span>Contenido del Informe</span>
+          </label>
+        </legend>
+
+        <div class="sub-checks">
+          <label class="checkbox-label small">
+            <input type="checkbox" id="incluirResumen" checked>
+            <span>Incluir Resumen Ejecutivo</span>
+          </label>
+          <label class="checkbox-label small">
+            <input type="checkbox" id="incluirDesarrollo" checked>
+            <span>Incluir Desarrollo y Análisis</span>
+          </label>
+          <label class="checkbox-label small">
+            <input type="checkbox" id="incluirKPIs" checked>
+            <span>Incluir Tabla de Métricas</span>
+          </label>
+          <label class="checkbox-label small">
+            <input type="checkbox" id="incluirConclusiones" checked>
+            <span>Incluir Conclusiones</span>
+          </label>
+          <label class="checkbox-label small">
+            <input type="checkbox" id="incluirEstado" checked>
+            <span>Incluir Estado del Documento</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="resumenEjecutivo">Resumen Ejecutivo / Introducción:</label>
+          <textarea id="resumenEjecutivo" rows="3" required>Este documento resume el progreso general alcanzado durante el último ciclo operativo. Se detallan las métricas alcanzadas, desviaciones detectadas y las acciones correctivas aplicadas.</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="desarrolloText">Desarrollo / Hallazgos Principales:</label>
+          <textarea id="desarrolloText" rows="5" required>Durante el período analizado, los indicadores principales mostraron una tendencia positiva constante. La implementación de los nuevos protocolos permitió optimizar los tiempos de ejecución en un 15%.
+
+Sin embargo, se identificaron cuellos de botella menores en la fase de distribución que requieren atención en el próximo período.</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Tabla de Métricas / Indicadores Clave:</label>
+          <div id="kpiContainer"></div>
+          <button type="button" id="btnAddKpi" class="btn-secondary">+ Agregar métrica</button>
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="conclusionesText">Conclusiones y Siguientes Pasos:</label>
+          <textarea id="conclusionesText" rows="3" required>Se consolida el avance del proyecto dentro de las estimaciones originales. Se recomienda aprobar la Fase 2 para mantener la continuidad operativa.</textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col">
+            <label for="estadoDoc">Estado / Clasificación Final:</label>
+            <select id="estadoDoc">
+              <option value="APROBADO" selected>APROBADO</option>
+              <option value="EN REVISIÓN">EN REVISIÓN</option>
+              <option value="REQUIERE ACCIÓN">REQUIERE ACCIÓN</option>
+              <option value="CONFIDENCIAL">CONFIDENCIAL</option>
+            </select>
+          </div>
+          <div class="form-group col">
+            <label for="numFirmas">Bloque de Firmas Al Final:</label>
+            <select id="numFirmas">
+              <option value="0" selected>Sin firmas</option>
+              <option value="1">1 Firma (Elaborado por)</option>
+              <option value="2">2 Firmas (Elaborado por / Aprobado por)</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <button type="submit" id="btnExport">Generar Informe Word (.docx)</button>
+    </form>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

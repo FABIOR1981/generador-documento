@@ -4,6 +4,10 @@ Herramienta web para armar informes formales y descargarlos como documento Word 
 
 Sitio publicado: https://generador-documento.netlify.app
 
+## Documentación
+
+El manual de usuario está en [documentacion-central](https://github.com/FABIOR1981/documentacion-central/tree/main/generador-documento/documentacion) ([PDF](https://github.com/FABIOR1981/documentacion-central/blob/main/generador-documento/documentacion/MANUAL_USUARIO.pdf)). También se puede consultar desde la bitácora de proyectos.
+
 ## Funcionalidades
 
 - **Estilos visuales**: Moderno, Corporativo Oscuro, Ecológico, Tecnológico y Clásico Papel.
